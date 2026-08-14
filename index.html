@@ -38,7 +38,7 @@ footer{max-width:1580px;margin:auto;padding:0 22px 30px;color:var(--muted);font-
 <div class="wrap">
 <div class="tabs"><button class="tabbtn active" data-tab="top">Global Top 20</button><button class="tabbtn" data-tab="universe">Company Universe</button><button class="tabbtn" data-tab="portfolio">Portfolio Lab</button><button class="tabbtn" data-tab="model">Scoring Model</button><button class="tabbtn" data-tab="cards">Company Cards</button><button class="tabbtn" data-tab="guide">Guide / README</button><button class="tabbtn" data-tab="method">Data & Method</button></div>
 
-<section id="top" class="tab active"><div class="panel"><h2>Dynamic master ranking</h2><div class="toolbar"><label>Region <select id="rTop"></select></label><label>Rank by <select id="rank"><option value="composite">Composite</option><option value="quality">Quality</option><option value="investment">Investment</option><option value="moat">Moat</option><option value="resilience">Resilience</option><option value="fit">Portfolio fit</option></select></label><label>Show <select id="show"><option>10</option><option selected>20</option><option>30</option><option>All</option></select></label><label><input type="checkbox" id="seatOnly"> Seat-test only</label><input id="sTop" type="text" placeholder="Search…"><button class="primary" onclick="loadShown()">Load shown Top 20 to portfolio</button></div>
+<section id="top" class="tab active"><div class="panel"><h2>Dynamic master ranking <span class="small">— only this tab is capped by the “Show” selector</span></h2><div class="toolbar"><label>Region <select id="rTop"></select></label><label>Rank by <select id="rank"><option value="composite">Composite</option><option value="quality">Quality</option><option value="investment">Investment</option><option value="moat">Moat</option><option value="resilience">Resilience</option><option value="fit">Portfolio fit</option></select></label><label>Show <select id="show"><option>10</option><option selected>20</option><option>30</option><option>All</option></select></label><label><input type="checkbox" id="seatOnly"> Seat-test only</label><input id="sTop" type="text" placeholder="Search…"><button class="primary" onclick="loadShown()">Load shown Top 20 to portfolio</button></div>
 <div class="filter-grid">
 <label>AI exposure<select id="fAI"><option value="Any">Any</option><option value="ExcludeHigh">Exclude high</option><option value="LowOnly">Low only</option><option value="HighOnly">High only</option></select></label>
 <label>Defence exposure<select id="fDef"><option value="Any">Any</option><option value="Exclude">Exclude</option><option value="Only">Only defence-exposed</option></select></label>
@@ -54,13 +54,13 @@ footer{max-width:1580px;margin:auto;padding:0 22px 30px;color:var(--muted);font-
 <div class="filter-summary" id="filterSummary"></div>
 <div id="topTable"></div><p class="small">Rankings use your current scoring-model weights. P/E and market-cap fields are static snapshot inputs.</p></div></section>
 
-<section id="universe" class="tab"><div class="panel"><h2>Company universe</h2><div class="toolbar"><label>Region <select id="rUni"></select></label><label>Sector <select id="sector"></select></label><input id="sUni" type="text" placeholder="Search…"><button onclick="exportCSV()">Export universe CSV</button></div><div class="filter-summary">The thematic/risk filters set in <b>Global Top 20</b> also apply here. Set them there, then return to the Universe to browse all matching companies.</div><div id="uniTable"></div></div></section>
+<section id="universe" class="tab"><div class="panel"><h2>Company universe</h2><div class="toolbar"><label>Region <select id="rUni"></select></label><label>Sector <select id="sector"></select></label><input id="sUni" type="text" placeholder="Search…"><button onclick="resetAdvancedFilters()">Clear thematic filters</button><button onclick="exportCSV()">Export universe CSV</button></div><div class="filter-summary">The thematic/risk filters set in <b>Global Top 20</b> also apply here. This view shows <b>all matching companies</b>, not just the Top 20. <span id="uniCount"></span></div><div id="uniTable"></div></div></section>
 
 <section id="portfolio" class="tab"><div class="grid"><div class="panel"><h2>Portfolio allocation editor</h2><div class="toolbar"><button class="primary" onclick="preset('balanced')">Balanced Global</button><button onclick="preset('quality')">Max Quality</button><button onclick="preset('defensive')">Defensive</button><button onclick="preset('europe')">Europe Only</button><button onclick="preset('us')">US Tilt</button><button onclick="preset('asia')">Asia-Pacific Tilt</button><button onclick="normalizeP()">Normalize</button><button onclick="clearP()">Clear</button></div><div id="portTable"></div></div><div><div class="panel"><h2>Portfolio diagnostics</h2><div class="kpis"><div class="kpi"><div class="label">Invested</div><div class="value" id="kInvd">–</div></div><div class="kpi"><div class="label">Composite</div><div class="value" id="kComp">–</div></div><div class="kpi"><div class="label">Quality</div><div class="value" id="kQual">–</div></div><div class="kpi"><div class="label">Resilience</div><div class="value" id="kRes">–</div></div><div class="kpi"><div class="label">Effective holdings</div><div class="value" id="kEff">–</div></div></div><h3>Warnings</h3><div id="warns"></div></div><div class="panel"><h2>Region exposure</h2><div class="chartbox"><canvas id="regionChart"></canvas></div></div><div class="panel"><h2>Economic-driver exposure</h2><div class="chartbox"><canvas id="driverChart"></canvas></div></div></div></div></section>
 
-<section id="model" class="tab"><div class="panel"><h2>Scoring-model editor</h2><p class="small">Change the importance of quality factors and final decision metrics. Rankings recalculate instantly.</p><div class="model-grid"><div><h3>Quality factors</h3><div id="qControls"></div><div id="qTotal"></div><div class="toolbar"><button onclick="resetQ()">Reset</button><button onclick="equalQ()">Equal</button></div></div><div><h3>Final decision metrics</h3><div id="dControls"></div><div id="dTotal"></div><div class="toolbar"><button onclick="resetD()">Reset</button><button onclick="equalD()">Equal</button></div></div></div><h3>Current Top 20 under your model</h3><div id="modelPreview"></div></div></section>
+<section id="model" class="tab"><div class="panel"><h2>Scoring-model editor</h2><p class="small">Change the importance of quality factors and final decision metrics. Rankings recalculate instantly.</p><div class="model-grid"><div><h3>Quality factors</h3><div id="qControls"></div><div id="qTotal"></div><div class="toolbar"><button onclick="resetQ()">Reset</button><button onclick="equalQ()">Equal</button></div></div><div><h3>Final decision metrics</h3><div id="dControls"></div><div id="dTotal"></div><div class="toolbar"><button onclick="resetD()">Reset</button><button onclick="equalD()">Equal</button></div></div></div><h3>Current Top 20 under your model</h3><p class="small">This preview is intentionally limited to 20. Use Company Universe to browse all 100 candidates.</p><div id="modelPreview"></div></div></section>
 
-<section id="cards" class="tab"><div class="panel"><h2>Company cards</h2><div class="toolbar"><label>Region <select id="rCards"></select></label><input id="sCards" type="text" placeholder="Search cards…"></div><div id="cardsGrid" class="cards"></div></div></section>
+<section id="cards" class="tab"><div class="panel"><h2>Company cards</h2><div class="toolbar"><label>Region <select id="rCards"></select></label><input id="sCards" type="text" placeholder="Search cards…"><button onclick="document.getElementById('sCards').value='';document.getElementById('rCards').value='Global';resetAdvancedFilters()">Show all cards</button></div><div class="filter-summary">This view shows <b>all matching company cards</b>. <span id="cardsCount"></span></div><div id="cardsGrid" class="cards"></div></div></section>
 
 
 <section id="guide" class="tab">
@@ -269,6 +269,12 @@ function quality(c){let w=n(qW);return Object.keys(w).reduce((s,k)=>s+w[k]*c.fac
 function comp(c){let w=n(dW);return w.quality*quality(c)+w.investment*c.investment+w.fit*c.fit+w.replaceability*c.replaceability*10+w.resilience*c.resilience*10;}
 function val(c,m){return m==='quality'?quality(c):m==='investment'?c.investment:m==='moat'?c.factors.moat:m==='resilience'?c.resilience*10:m==='fit'?c.fit:comp(c);}
 function f(x,d=1){return Number(x||0).toFixed(d)} function regions(){return ['Global',...new Set(companies.map(c=>c.region))]} function sectors(){return ['All',...new Set(companies.map(c=>c.sector).sort())]}
+function resetAdvancedFilters(){
+  ['fAI','fDef','fChina','fGeo','fRecurring','fCyc','fClimate','fOwner','fReview','fPE'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='Any';
+  });
+  renderAll();
+}
 function activeFilters(){
   const get=id=>document.getElementById(id)?document.getElementById(id).value:'Any';
   return {ai:get('fAI'),def:get('fDef'),china:get('fChina'),geo:get('fGeo'),rec:get('fRecurring'),cyc:get('fCyc'),climate:get('fClimate'),owner:get('fOwner'),review:get('fReview'),pe:get('fPE')};
@@ -311,15 +317,81 @@ function renderFilterSummary(){
   document.getElementById('filterSummary').innerHTML='<b>'+count+' companies match.</b> '+(active.length?'Active filters: '+active.join(' · '):'No thematic/risk filters active.');
 }
 function renderTop(){let l=ranked(filt(document.getElementById('rTop').value,document.getElementById('sTop').value,'All',document.getElementById('seatOnly').checked),document.getElementById('rank').value);if(document.getElementById('show').value!=='All')l=l.slice(0,Number(document.getElementById('show').value));document.getElementById('topTable').innerHTML=table(l,true)}
-function renderUni(){document.getElementById('uniTable').innerHTML=table(ranked(filt(document.getElementById('rUni').value,document.getElementById('sUni').value,document.getElementById('sector').value,false)),true)}
+function renderUni(){
+  var list=ranked(filt(
+    document.getElementById('rUni').value,
+    document.getElementById('sUni').value,
+    document.getElementById('sector').value,
+    false
+  ),'composite');
+  document.getElementById('uniTable').innerHTML=table(list,true);
+  var count=document.getElementById('uniCount');
+  if(count) count.textContent=list.length+' companies shown';
+}
 function renderPort(){let sel=companies.filter(c=>(pW[c.name]||0)>0).sort((a,b)=>pW[b.name]-pW[a.name]);let total=Object.values(pW).reduce((a,b)=>a+Number(b||0),0);document.getElementById('portTable').innerHTML=`<table><thead><tr><th>Company</th><th class="num">Composite</th><th class="num">Quality</th><th>Weight</th><th></th></tr></thead><tbody>${sel.map(c=>`<tr><td><b>${c.name}</b><div class="small">${c.region} · ${c.sector}</div></td><td class="num">${f(comp(c))}</td><td class="num">${f(quality(c))}</td><td><div class="weight-row"><input type="range" min="0" max="25" step="0.5" value="${pW[c.name]}" oninput="setP('${c.name}',this.value)"><input type="number" min="0" max="100" step="0.5" value="${pW[c.name]}" onchange="setP('${c.name}',this.value)">%</div></td><td><button onclick="setP('${c.name}',0)">Remove</button></td></tr>`).join('')||'<tr><td colspan="5">No holdings. Add companies from the ranking or universe.</td></tr>'}</tbody><tfoot><tr><th colspan="3">Total invested</th><th>${f(total)}%</th><th></th></tr><tr><th colspan="3">Cash / unallocated</th><th>${f(100-total)}%</th><th></th></tr></tfoot></table>`;updateK(sel,total)}
 function wavg(sel,total,metric){return total?sel.reduce((s,c)=>s+pW[c.name]*(metric==='quality'?quality(c):metric==='composite'?comp(c):metric==='resilience'?c.resilience:c[metric]),0)/total:0}
 function group(sel,k){let g={};sel.forEach(c=>g[c[k]]=(g[c[k]]||0)+pW[c.name]);return g}
 function updateK(sel,total){document.getElementById('kInvd').textContent=f(total)+'%';document.getElementById('kComp').textContent=f(wavg(sel,total,'composite'));document.getElementById('kQual').textContent=f(wavg(sel,total,'quality'));document.getElementById('kRes').textContent=f(wavg(sel,total,'resilience'),2);let nw=sel.map(c=>pW[c.name]/(total||1));let eff=nw.length?1/nw.reduce((s,w)=>s+w*w,0):0;document.getElementById('kEff').textContent=f(eff);let msgs=[];if(total>100.01)msgs.push(['',`Allocation exceeds 100% by ${f(total-100)}%.`]);else if(total<95)msgs.push(['',`Cash/unallocated is ${f(100-total)}%.`]);else msgs.push(['good','Allocation is within target range.']);if(sel[0]&&pW[sel[0].name]>15)msgs.push(['',`${sel[0].name} exceeds 15%.`]);let rg=Object.entries(group(sel,'region')).sort((a,b)=>b[1]-a[1])[0];if(rg&&rg[1]>55)msgs.push(['',`${rg[0]} exposure exceeds 55%.`]);document.getElementById('warns').innerHTML=msgs.map(m=>`<div class="warn ${m[0]}">${m[1]}</div>`).join('');draw(document.getElementById('regionChart'),group(sel,'region'));draw(document.getElementById('driverChart'),group(sel,'driver'))}
 function draw(canvas,data){let ctx=canvas.getContext('2d'),dpr=devicePixelRatio||1,w=canvas.clientWidth,h=canvas.clientHeight;canvas.width=w*dpr;canvas.height=h*dpr;ctx.scale(dpr,dpr);ctx.clearRect(0,0,w,h);let vals=Object.entries(data).sort((a,b)=>b[1]-a[1]).slice(0,8),max=Math.max(1,...vals.map(v=>v[1])),left=145,row=27;ctx.font='12px Segoe UI';ctx.textBaseline='middle';vals.forEach((v,i)=>{let y=12+i*row;ctx.fillStyle='#475467';ctx.fillText(v[0],8,y+9);ctx.fillStyle='#e7ebef';ctx.fillRect(left,y,w-left-50,18);ctx.fillStyle='#315f7d';ctx.fillRect(left,y,(w-left-50)*v[1]/max,18);ctx.fillStyle='#17202a';ctx.fillText(f(v[1])+'%',w-42,y+9)})}
 function renderControls(){let make=(obj,labels,kind)=>Object.entries(labels).map(([k,l])=>`<div class="model-row"><label>${l}</label><input type="range" min="0" max="100" step="1" value="${obj[k]}" oninput="setModel('${kind}','${k}',this.value)"><input type="number" min="0" max="100" step="1" value="${obj[k]}" onchange="setModel('${kind}','${k}',this.value)"></div>`).join('');document.getElementById('qControls').innerHTML=make(qW,factorLabels,'q');document.getElementById('dControls').innerHTML=make(dW,decisionLabels,'d');let qt=Object.values(qW).reduce((a,b)=>a+Number(b),0),dt=Object.values(dW).reduce((a,b)=>a+Number(b),0);document.getElementById('qTotal').textContent='Total: '+f(qt,0)+'%';document.getElementById('dTotal').textContent='Total: '+f(dt,0)+'%';document.getElementById('modelPreview').innerHTML=table(ranked(companies).slice(0,20),false)}
-function renderCards(){let list=ranked(filt(document.getElementById('rCards').value,document.getElementById('sCards').value));document.getElementById('cardsGrid').innerHTML=list.map(c=>`<article class="card" id="card-${css(c.name)}"><h3>${c.name} ${c.seat?'<span class="badge green">Seat candidate</span>':'<span class="badge yellow">Watchlist</span>'}</h3><div class="meta">${c.ticker} · ${c.country} · ${c.region} · ${c.sector} · ${c.reviewStatus}</div><div class="scoreline"><div class="score"><b>${f(comp(c))}</b>Composite</div><div class="score"><b>${f(quality(c))}</b>Quality</div><div class="score"><b>${f(c.investment,0)}</b>Inv.</div><div class="score"><b>${c.fit}</b>Fit</div><div class="score"><b>${c.replaceability}</b>Replace</div><div class="score"><b>${c.resilience}</b>Resil.</div></div><p><b>Thesis.</b> ${c.thesis}</p><p class="small"><b>Tags:</b> AI ${c.aiExposure} · Recurring revenue ${c.recurringRevenue} · Cyclicality ${c.cyclicality} · China exposure ${c.chinaExposure} · Climate ${c.climateTransition}${c.defenceExposure?' · Defence exposure':''}${c.founderFamily?' · Founder/family aligned':''}</p><p class="small"><b>P/E:</b> ${c.pe==null?'—':f(c.pe)} · <b>Market cap:</b> approx. ${f(c.marketCap,0)}bn · <b>Snapshot:</b> ${asOf}</p><details><summary>Risks</summary><ul>${c.risks.map(r=>`<li>${r}</li>`).join('')}</ul></details><p><button onclick="addP('${c.name}')">Add to portfolio</button></p></article>`).join('')}
-function css(n){return n.split(' ').join('-').split('&').join('and').split('/').join('-')}function openCard(name){document.querySelector('[data-tab="cards"]').click();document.getElementById('sCards').value=name;renderAll();setTimeout(()=>(function(){var el=document.getElementById('card-'+css(name));if(el)el.scrollIntoView({behavior:'smooth',block:'center'})})(),50)}
+function renderCards(){
+  var list=ranked(filt(
+    document.getElementById('rCards').value,
+    document.getElementById('sCards').value,
+    'All',
+    false
+  ),'composite');
+
+  document.getElementById('cardsGrid').innerHTML=list.map(function(c){
+    var seatBadge=c.seat
+      ? '<span class="badge green">Seat candidate</span>'
+      : '<span class="badge yellow">Watchlist</span>';
+
+    var tagText='AI '+c.aiExposure+
+      ' · Recurring revenue '+c.recurringRevenue+
+      ' · Cyclicality '+c.cyclicality+
+      ' · China exposure '+c.chinaExposure+
+      ' · Climate '+c.climateTransition+
+      (c.defenceExposure?' · Defence exposure':'')+
+      (c.founderFamily?' · Founder/family aligned':'');
+
+    var riskHtml=(c.risks||[]).map(function(r){return '<li>'+r+'</li>';}).join('');
+    var peText=c.pe==null?'—':f(c.pe);
+    var mcapText=c.marketCap==null?'—':'approx. '+f(c.marketCap,0)+'bn USD';
+    var safeName=String(c.name).split('&').join('&amp;').split('"').join('&quot;').split('<').join('&lt;').split('>').join('&gt;');
+
+    return '<article class="card" id="card-'+css(c.name)+'">'+
+      '<h3>'+c.name+' '+seatBadge+'</h3>'+
+      '<div class="meta">'+c.ticker+' · '+c.country+' · '+c.region+' · '+c.sector+' · '+c.reviewStatus+'</div>'+
+      '<div class="scoreline">'+
+        '<div class="score"><b>'+f(comp(c))+'</b>Composite</div>'+
+        '<div class="score"><b>'+f(quality(c))+'</b>Quality</div>'+
+        '<div class="score"><b>'+f(c.investment,0)+'</b>Inv.</div>'+
+        '<div class="score"><b>'+c.fit+'</b>Fit</div>'+
+        '<div class="score"><b>'+c.replaceability+'</b>Replace</div>'+
+        '<div class="score"><b>'+c.resilience+'</b>Resil.</div>'+
+      '</div>'+
+      '<p><b>Thesis.</b> '+c.thesis+'</p>'+
+      '<p class="small"><b>Tags:</b> '+tagText+'</p>'+
+      '<p class="small"><b>P/E:</b> '+peText+' · <b>Market cap:</b> '+mcapText+' · <b>Snapshot:</b> '+asOf+'</p>'+
+      '<details><summary>Risks</summary><ul>'+riskHtml+'</ul></details>'+
+      '<p><button onclick="addP(&quot;'+safeName+'&quot;)">Add to portfolio</button></p>'+
+    '</article>';
+  }).join('');
+
+  var count=document.getElementById('cardsCount');
+  if(count) count.textContent=list.length+' companies shown';
+}
+function css(n){return n.split(' ').join('-').split('&').join('and').split('/').join('-')}function openCard(name){
+  document.getElementById('rCards').value='Global';
+  document.getElementById('sCards').value=name;
+  document.querySelector('[data-tab="cards"]').click();
+  renderCards();
+  setTimeout(function(){
+    var el=document.getElementById('card-'+css(name));
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  },80);
+}
 function setP(name,val){pW[name]=Math.max(0,Math.min(100,Number(val)||0));safeStore.set('glc_pW',JSON.stringify(pW));renderPort()}function addP(name){if(!pW[name])pW[name]=2;safeStore.set('glc_pW',JSON.stringify(pW));renderPort()}function clearP(){pW=Object.fromEntries(companies.map(c=>[c.name,0]));safeStore.set('glc_pW',JSON.stringify(pW));renderPort()}function normalizeP(){let t=Object.values(pW).reduce((a,b)=>a+Number(b||0),0);if(!t)return;Object.keys(pW).forEach(k=>pW[k]=+(pW[k]*100/t).toFixed(1));safeStore.set('glc_pW',JSON.stringify(pW));renderPort()}
 const presets={balanced:null,quality:null,defensive:null,europe:null,us:null,asia:null};
 function preset(name){pW=Object.fromEntries(companies.map(c=>[c.name,0]));let list=name==='europe'?ranked(filt('Europe')).slice(0,15):name==='us'?ranked(filt('North America')).slice(0,15):name==='asia'?ranked(filt('Asia-Pacific')).slice(0,15):name==='quality'?ranked(companies,'quality').slice(0,15):name==='defensive'?ranked(companies,'resilience').slice(0,15):ranked(companies).slice(0,20);list.forEach(c=>pW[c.name]=+(100/list.length).toFixed(1));safeStore.set('glc_pW',JSON.stringify(pW));renderPort()}
